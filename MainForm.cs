@@ -18,7 +18,7 @@ namespace wottools
     public partial class MainForm : Form
     {
         public string PackedFileName = "";
-        public static readonly string sver = "0.5";
+        public static readonly string sver = "0.5.1";
         public static readonly string stitle = "WoT Mod Tools ";
         public Packed_Section PS = new Packed_Section();
         public Primitive_File PF = new Primitive_File();
