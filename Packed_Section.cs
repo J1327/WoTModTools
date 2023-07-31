@@ -1,4 +1,5 @@
-﻿using System;
+using System.Windows.Forms; // Debugging.
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
@@ -341,11 +342,29 @@ namespace Packed_Section_Reader
 
             int offset = readData(reader, dictionary, element, xDoc, 0, selfDataDescriptor);
 
+            // Fix prefix for .xml elements with "xmlns:"
+            for (int i = 0; i < dictionary.Count; i++)
+            {
+                if (dictionary[i].StartsWith("xmlns:"))
+                {
+                    dictionary[i] = dictionary[i].Substring(6); // Removes 'xmlns:' prefix
+                }
+            }
+            
             foreach (ElementDescriptor elementDescriptor in children)
             {
-                XmlNode child = xDoc.CreateElement(dictionary[elementDescriptor.nameIndex]);
+                string elementName = dictionary[elementDescriptor.nameIndex];
+
+                // Debug .xml files
+                // Check for element names starting with "xml" before creating the XML elements.
+                if (elementName.StartsWith("xml"))
+                {
+                    MessageBox.Show($"Element name '{elementName}' starts with 'xml'.");
+                }
+
+                XmlNode child = xDoc.CreateElement(elementName);
                 offset = readData(reader, dictionary, child, xDoc, offset, elementDescriptor.dataDescriptor);
-                element.AppendChild(child);            
+                element.AppendChild(child);
             }
 
         }
